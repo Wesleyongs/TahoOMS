@@ -3,7 +3,6 @@ import pandas as pd
 import datetime as dt
 import itertools
 import math
-import pyautogui
 import streamlit.components.v1 as stc
 
 # Settings
@@ -82,7 +81,6 @@ with st.form(key='my_form'):
         df = df.append(form_dict, ignore_index=True)
         df.to_csv('database.csv', index=False)
         df = pd.read_csv('database.csv', parse_dates=['date'])
-        pyautogui.hotkey('f5')
         # st.markdown("<a href='#summary-data'>View Changes</a>", unsafe_allow_html=True)
     
 # Delete row
@@ -95,7 +93,6 @@ with st.form(key='delete_form'):
 if del_submit_button:
     df = df.drop(del_index)
     df.to_csv('database.csv', index=False)
-    pyautogui.hotkey('f5')
 
 # Save data
 if st.button('Save Changes', key=None, help=None, on_click=None, args=None, kwargs=None): df.to_csv('database.csv', index=False)
