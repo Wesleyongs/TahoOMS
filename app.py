@@ -56,8 +56,6 @@ for col in itertools.cycle(columns):
         col.metric(f"{products[count]}", f"{amount}", f"{percentage_change:.2f} %")
         count += 1
 
-sc.write(df)
-
 # Add new data 
 with st.sidebar.form(key='my_form'):
 
@@ -96,5 +94,8 @@ with st.sidebar.form(key='delete_form'):
 if del_submit_button:
     df = df.drop(del_index)
     df.to_csv('database.csv', index=False)
+    
+sc.write(df)
+
 
 
