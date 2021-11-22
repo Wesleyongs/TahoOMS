@@ -64,7 +64,7 @@ with st.form(key='my_form'):
     st.header("Add New Order")
     form_dict = {}
     form_dict['date'] = st.date_input('Date', value=dt.date.today(), min_value=None, max_value=None, key=None, help=None, on_change=None, args=None, kwargs=None)
-    form_dict['address'] = st.text_input('Address', value="", max_chars=None, key=None, type="default", help=None, autocomplete=None, on_change=None, args=None, kwargs=None, placeholder=None)
+    form_dict['address'] = st.text_input('Address', value="", max_chars=None, key=None, type="default", help=None, autocomplete=None, on_change=None, args=None, kwargs=None)
     cols = st.columns(3)
     for cycle in range(0, math.ceil(len(products)/3)):
         for i, col in enumerate(cols):
