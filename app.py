@@ -8,7 +8,7 @@ import streamlit.components.v1 as stc
 # Settings
 st.set_page_config(
 	layout="centered",  # Can be "centered" or "wide". In the future also "dashboard", etc.
-	initial_sidebar_state="collapsed",  # Can be "auto", "expanded", "collapsed"
+	initial_sidebar_state="auto",  # Can be "auto", "expanded", "collapsed"
 	page_title=None,  # String or None. Strings get appended with "• Streamlit". 
 	page_icon=None,  # String, anything supported by st.image, or None.
 )
@@ -21,6 +21,10 @@ st.markdown(
     [data-testid="stSidebar"][aria-expanded="false"] > div:first-child {
         width: 500px;
         margin-left: -500px;
+    }
+    @media (max-width: 540px)
+    .css-1b2d4l5 {
+        min-width: calc(100% - 1.5rem);
     }
     </style>
     """,
