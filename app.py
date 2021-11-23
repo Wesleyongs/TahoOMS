@@ -97,7 +97,10 @@ if del_submit_button:
     df.to_csv('database.csv', index=False)
     
 # Read the DF
-sc.write(df.style.format({"E": "{:.2f}"}))
+format_dict = {}
+for i in products: 
+    format_dict[i] = "{:.0f}"
+sc.write(df.style.format(format_dict))
 
 # Import and export
 ie_expander = st.expander("Edit raw excel file")
