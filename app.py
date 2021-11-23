@@ -12,9 +12,21 @@ st.set_page_config(
 	page_title=None,  # String or None. Strings get appended with "• Streamlit". 
 	page_icon=None,  # String, anything supported by st.image, or None.
 )
+st.markdown(
+    """
+    <style>
+    [data-testid="stSidebar"][aria-expanded="true"] > div:first-child {
+        width: 500px;
+    }
+    [data-testid="stSidebar"][aria-expanded="false"] > div:first-child {
+        width: 500px;
+        margin-left: -500px;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
 
-# variables 
-products = ['Jelly','Cut','Young','Taro','Mango']
 # Import data
 df = pd.read_csv('database.csv', parse_dates=['date'])
 df['date'] = df['date'].apply(lambda x: x.date())
@@ -28,10 +40,6 @@ HTML_BANNER = """
     </div>
     """
 stc.html(HTML_BANNER)
-
-# Side bar
-# for i in ['summary-data','add-new-order','remove-order']:
-#     st.sidebar.markdown(f"<a href='#{i}'>{i}</a>", unsafe_allow_html=True)
 
 # Selector pannel
 sc = st.container()
@@ -63,18 +71,13 @@ with st.sidebar.form(key='my_form'):
     form_dict = {}
     form_dict['date'] = st.date_input('Date', value=dt.date.today(), min_value=None, max_value=None, key=None, help=None, on_change=None, args=None, kwargs=None)
     form_dict['address'] = st.text_input('Address', value="", max_chars=None, key=None, type="default", help=None, autocomplete=None, on_change=None, args=None, kwargs=None)
-    # cols = st.columns(3)
-    # for cycle in range(0, math.ceil(len(products)/3)):
-    #     for i, col in enumerate(cols):
-    #         i = (i)+(cycle*3)
-    #         try:
-    #             product = products[i]
-    #             form_dict[product] = col.number_input(product, min_value=0, key=i)
-    #         except:
-    #             pass
+    col1, col2 = st.columns(2)
     for i, col in enumerate(range(len(products))):
         product = products[i]
-        form_dict[product] = st.number_input(product, min_value=0, key=i)
+        if i % 2 == 1:form_dict[product] = col1.number_input(product, min_value=0, key=i)
+        else:form_dict[product] = col2.number_input(product, min_value=0, key=i)
+        
+    form_dict['Amount'] = st.number_input('Amount', min_value=0)
     form_dict['Author'] = st.selectbox("Author", ['XX','WES','Ku','Evan'], index=0, key=None, help=None, on_change=None, args=None, kwargs=None)
     submit_button = st.form_submit_button(label='Add Order')
     
@@ -83,7 +86,6 @@ with st.sidebar.form(key='my_form'):
         df.to_csv('database.csv', index=False)
         df = pd.read_csv('database.csv', parse_dates=['date'])
         df['date'] = df['date'].apply(lambda x: x.date())
-        # st.markdown("<a href='#summary-data'>View Changes</a>", unsafe_allow_html=True)
     
 # Delete row
 with st.sidebar.form(key='delete_form'):
@@ -100,7 +102,7 @@ if del_submit_button:
 format_dict = {}
 for i in products: 
     format_dict[i] = "{:.0f}"
-sc.write(df.style.format(format_dict))
+sc.dataframe(df.style.format(format_dict))
 
 # Import and export
 ie_expander = st.expander("Edit raw excel file")
