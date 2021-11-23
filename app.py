@@ -30,7 +30,7 @@ st.markdown(
 # Import data
 df = pd.read_csv('database.csv', parse_dates=['date'])
 df['date'] = df['date'].apply(lambda x: x.date())
-products = df.iloc[:,2:-1].columns
+products = df.iloc[:,2:-2].columns
 
 # Banner
 HTML_BANNER = """
@@ -49,8 +49,7 @@ selected_date = sc.date_input('Select a date', value=dt.date.today(), min_value=
 
 # Display summary
 selected_df = df[df['date'] == selected_date]
-col1, col2, col3 = sc.columns(3)
-columns = [col1,col2,col3]
+columns = sc.columns(5)
 
 count = 0
 for col in itertools.cycle(columns):
