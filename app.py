@@ -15,10 +15,10 @@ st.set_page_config(
 
 # variables 
 products = ['Jelly','Cut','Young','Taro','Mango']
-
 # Import data
 df = pd.read_csv('database.csv', parse_dates=['date'])
 df['date'] = df['date'].apply(lambda x: x.date())
+products = df.iloc[:,3:-1].columns
 
 # Banner
 HTML_BANNER = """
@@ -82,6 +82,7 @@ with st.sidebar.form(key='my_form'):
         df = df.append(form_dict, ignore_index=True)
         df.to_csv('database.csv', index=False)
         df = pd.read_csv('database.csv', parse_dates=['date'])
+        df['date'] = df['date'].apply(lambda x: x.date())
         # st.markdown("<a href='#summary-data'>View Changes</a>", unsafe_allow_html=True)
     
 # Delete row
@@ -95,7 +96,16 @@ if del_submit_button:
     df = df.drop(del_index)
     df.to_csv('database.csv', index=False)
     
-sc.write(df)
+# Read the DF
+sc.write(df.style.format({"E": "{:.2f}"}))
 
-
+# Import and export
+ie_expander = st.expander("Edit raw excel file")
+downloaded = ie_expander.download_button("Download raw file", data=df.to_csv(index=False).encode('utf-8'), file_name="database.csv", help="Download the excel file for all the order history", on_click=None)
+uploaded_file = ie_expander.file_uploader('Upload File', type='csv', help="Once done editing the raw file, reupload here. Don't forget to save a backup copy just incase!")
+if uploaded_file:
+    dataframe = pd.read_csv(uploaded_file, parse_dates=["date"])
+    dataframe.to_csv('database.csv', index=False)
+    df = pd.read_csv('database.csv', parse_dates=['date'])
+    df['date'] = df['date'].apply(lambda x: x.date())
 
