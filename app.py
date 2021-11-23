@@ -30,7 +30,7 @@ st.markdown(
 # Import data
 df = pd.read_csv('database.csv', parse_dates=['date'])
 df['date'] = df['date'].apply(lambda x: x.date())
-products = df.iloc[:,3:-1].columns
+products = df.iloc[:,2:-1].columns
 
 # Banner
 HTML_BANNER = """
@@ -74,7 +74,7 @@ with st.sidebar.form(key='my_form'):
     col1, col2 = st.columns(2)
     for i, col in enumerate(range(len(products))):
         product = products[i]
-        if i % 2 == 1:form_dict[product] = col1.number_input(product, min_value=0, key=i)
+        if i % 2 == 0:form_dict[product] = col1.number_input(product, min_value=0, key=i)
         else:form_dict[product] = col2.number_input(product, min_value=0, key=i)
         
     form_dict['Amount'] = st.number_input('Amount', min_value=0)
